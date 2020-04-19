@@ -14,12 +14,19 @@
 
   <rainbow-button>Click me!</rainbow-button>
 
-  <script>
+  <script type="text/javascript">
+
     class RainbowButton extends HTMLElement {
       constructor() {
         super();
         const originalTextContent = this.textContent;
-        this.textContent = `🌈${originalTextContent}🌈`;
+
+        // Switching it up for a Shadow DOM
+        this.attachShadow({mode: 'open'});
+
+        const el = document.createElement('p');
+        el.textContent = `🌈 ${originalTextContent}🌈 `;
+        this.shadowRoot.appendChild(el);
       }
     }
 

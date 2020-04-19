@@ -12,5 +12,8 @@
   "dependencies": {
     "http-server": "^0.12.1",
     "semantic-ui-css": "^2.4.1"
+  },
+  "devDependencies": {
+    "prettier": "^2.0.4"
   }
 }
