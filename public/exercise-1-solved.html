@@ -2,97 +2,72 @@
 <html class="no-js" lang="">
 
 <head>
-    <title>Targeted Topics - Web Components</title>
-    <meta charset="utf8" />
-    <link href="/vendor/semantic-ui/semantic.min.css" rel="stylesheet" type="text/css" />
+  <title>Targeted Topics - Web Components</title>
+  <meta charset="utf8" />
+  <link href="/vendor/semantic-ui/semantic.min.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body class="ui container">
-    <h1>Exercise 1</h1>
+  <h1>Exercise 1</h1>
 
-    <p>Create a "joke-machine" Web Component</p>
+  <p>Create a "joke-machine" Web Component</p>
 
-    <p>Our joke-machine element will render out a random joke from an internal list of 3-5 jokes</p>
+  <p>Our joke-machine element will render out a random joke from an internal list of 3-5 jokes</p>
 
-    <p>Need joke ideas? See https://icanhazdadjoke.com/</p>
+  <p>Need joke ideas? See https://icanhazdadjoke.com/</p>
+
+  <ol>
+    <li>The element will randomly display a joke (in a &lt;p&gt; tag) from the array</li>
+    <li>Use a shadow dom to encapsulate your content</li>
+    <li>Don't forget to register your custom element</li>
+    <li>Bonus: Add a button next to the joke which changes the joke when a user clicks it (el.addEventListener)</li>
+  </ol>
+
+  <div class="ui segment">
 
     <joke-machine></joke-machine>
 
-    <joke-machine></joke-machine>
+    <script>
 
-    <script type="text/javascript">
+      /**
+       * Returns a random integer from 0 up to but not including the max
+       */
+      function getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+      }
 
-        /**
-         * Returns a random integer up to but not including the max
-         */
-        function getRandomInt(max) {
-            return Math.floor(Math.random() * Math.floor(max));
+      // @todo - I shouldn't pollute the global scope
+      const jokes = [
+        'You know what they say about cliffhangers...',
+        'Why did the coffee file a police report? It got mugged.',
+        'I saw a documentary on TV last night about how they put ships together. It was rivetting.'
+      ];
+
+      class JokeMachine extends HTMLElement {
+        static jokes = [
+            'You know what they say about cliffhangers...',
+            'Why did the coffee file a police report? It got mugged.',
+            'I saw a documentary on TV last night about how they put ships together. It was rivetting.'
+        ]
+
+        constructor() {
+          super();
+
+          this.attachShadow({mode: 'open'});
+
+          const p = document.createElement('p');
+
+          p.innerHTML = this.jokes[getRandomInt(3)];
+
+          this.shadowRoot.appendChild(p);
         }
+      }
 
-        class JokeMachine extends HTMLElement {
-            constructor() {
-                super();
-
-                this.attachShadow({ mode: 'open' });
-
-                this.jokes = [
-                    'You know what they say about cliffhangers...',
-                    'Why did the coffee file a police report? It got mugged.',
-                    'I saw a documentary on TV last night about how they put ships together. It was rivetting.'
-                ];
-
-                this.currentJokeIndex = getRandomInt(3);
-
-                const p = document.createElement('p');
-                p.innerText = this.jokes[this.currentJokeIndex];
-
-                const button = document.createElement('button');
-                button.textContent = 'Change';
-
-                // @todo - this isn't the best place to register a handler...
-                button.addEventListener('click', () => {
-                    this.swapJoke();
-                });
-
-                this.shadowRoot.appendChild(p);
-                this.shadowRoot.appendChild(button);
-            }
-
-            swapJoke() {
-                let newRand = getRandomInt(3);
-                do {
-                    newRand = getRandomInt(3);
-                } while (newRand === this.currentJokeIndex);
-
-                this.currentJokeIndex = newRand;
-
-                this.setJoke(this.jokes[this.currentJokeIndex]);
-            }
-
-            setJoke(jokeText) {
-                // @todo - this selection feels wasteful
-                this.shadowRoot.querySelector('p').innerText = jokeText;
-            }
-
-            // connectedCallback() {
-            //     this.handler = (e) => {
-            //         this.swapJoke();
-            //     }
-
-            //     this.shadowRoot.querySelectorAll('button').forEach(
-            //         el => el.addEventListener('click', this.handler)
-            //     );
-            // }
-
-            // disconnectedCallback() {
-            //     if (typeof this.handler === 'function') {
-            //         this.shadowRoot.querySelectorAll('button').forEach(el => el.removeEventListener('click', this.handler));
-            //     }
-            // }
-        }
-
-        customElements.define('joke-machine', JokeMachine);
+      // @todo - register the custom element
+      customElements.define('joke-machine', JokeMachine);
     </script>
+
+  </div>
 
 </body>
 
