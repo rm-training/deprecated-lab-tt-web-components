@@ -8,16 +8,12 @@
 </head>
 
 <body class="ui container">
-  <h1>Exercise 1</h1>
+  <h1>Exercise 2</h1>
 
-  <p>Create a "joke-machine" Web Component</p>
-
-  <p>Our joke-machine element will render out a random joke from an internal list of 3-5 jokes</p>
-
-  <p>Need joke ideas? See https://icanhazdadjoke.com/</p>
+  <p>Improve our "joke-machine" with templates and handlers</p>
 
   <ol>
-    <li>Improve your web component by using a template to define the paragraph and button</li>
+    <li>Create a template with a paragraph and "switch joke" button"</li>
     <li>It should accepts at least one "slot", such as the button label</li>
     <li>Update the custom element class to use your template</li>
     <li>Bonus: Improve my custom element by registering the handler only once the node is connected to the DOM</li>
@@ -26,7 +22,11 @@
 
   <joke-machine></joke-machine>
 
-  <joke-machine></joke-machine>
+  <joke-machine>
+    <span slot="label">Swap Joke</span>
+  </joke-machine>
+  
+  <!-- @todo - add your <template> element here -->
 
   <script type="text/javascript">
 
@@ -51,19 +51,24 @@
 
         this.currentJokeIndex = getRandomInt(3);
 
+        // @todo - you'll remove some of these lines and instead...
+        // @todo - grab the template, clone it and append it
+        // @todo - you'll also need to update the template content
+        // this.shadowRoot.querySelector()
+
         const p = document.createElement('p');
         p.innerText = this.jokes[this.currentJokeIndex];
 
         const button = document.createElement('button');
         button.textContent = 'Change';
 
-        // @todo - this isn't the best place to register a handler...
+        this.shadowRoot.appendChild(p);
+        this.shadowRoot.appendChild(button);
+
+        // @todo - bonus - move this event handler registration into the connected callback
         button.addEventListener('click', () => {
           this.swapJoke();
         });
-
-        this.shadowRoot.appendChild(p);
-        this.shadowRoot.appendChild(button);
       }
 
       swapJoke() {
@@ -78,7 +83,7 @@
       }
 
       setJoke(jokeText) {
-        // @todo - this selection feels wasteful
+        // @todo - bonus - try to select this once (in the constructor)
         this.shadowRoot.querySelector('p').innerText = jokeText;
       }
     }
