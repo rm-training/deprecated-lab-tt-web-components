@@ -57,7 +57,7 @@
 
           const p = document.createElement('p');
 
-          p.innerHTML = this.jokes[getRandomInt(3)];
+          p.innerHTML = this.constructor.jokes[getRandomInt(3)];
 
           this.shadowRoot.appendChild(p);
         }
